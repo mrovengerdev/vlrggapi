@@ -7,8 +7,23 @@ from selectolax.parser import HTMLParser
 import utils.utils as res
 from utils.utils import headers
 
+import json
+import os
 
 class Vlr:
+    print("test")
+    def file_maker(self, url, result):
+        print("Here it is running")
+        pattern = r"(?<=\.gg\/)[^\/]+"
+        type = re.search(pattern, url)
+        home_directory = os.path.expanduser("~")
+        if type:
+            file_name = f"{home_directory}/Desktop/vlrggapi/output/{type}.json" # Need to fix output path
+            print(file_name)
+            with open(file_name, 'w') as file:
+                json.dump(result, file, indent=4)
+            print(f"List written to {file_name}")
+
     def get_parse(self, url):
         """
         It takes a URL, makes a request to that URL, and returns a tuple of the HTMLParser object and the status code
@@ -59,6 +74,8 @@ class Vlr:
         # This is creating a dictionary with the key "data" and the value of the dictionary is another dictionary
         # with the keys "status" and "segments".
         data = {"data": {"status": status, "segments": result}}
+
+        self.file_maker(url, result)
 
         # This is checking if the status code is not 200, if it is not 200 then it will raise an exception.
         if status != 200:
